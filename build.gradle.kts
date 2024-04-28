@@ -4,7 +4,7 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.0.1"
 }
 
-group = "live.einfachgustaf"
+group = "de.airblocks"
 version = "1.0"
 
 repositories {

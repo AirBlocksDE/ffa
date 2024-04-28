@@ -1,8 +1,8 @@
-package live.einfachgustaf.example
+package de.airblocks.ffa
 
 import net.axay.kspigot.main.KSpigot
 
-class ExamplePlugin: KSpigot() {
+class FFA: KSpigot() {
 
     companion object {
         lateinit var INSTANCE: ExamplePlugin; private set
