@@ -1,6 +1,8 @@
 package de.airblocks.ffa.listener
 
+import de.airblocks.ffa.hud.IngameHud
 import de.airblocks.ffa.utils.Values
+import de.verdox.mccreativelab.MCCreativeLabExtension
 import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.chat.literalText
 import net.axay.kspigot.event.listen
@@ -20,6 +22,10 @@ object PlayerJoinListener {
                     color = KColors.SLATEGRAY
                 }
             }))
+
+            MCCreativeLabExtension.getHudRenderer().getOrStartActiveHud(
+               player, IngameHud()
+            )
         }
     }
 }

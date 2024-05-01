@@ -1,6 +1,5 @@
 package de.airblocks.ffa.game
 
-import de.airblocks.ffa.extension.bukkit.isIngame
 import de.airblocks.ffa.kit.KitEngine
 import de.airblocks.ffa.utils.Values
 import net.axay.kspigot.chat.KColors
@@ -10,11 +9,12 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
-class GameScheduler: BukkitRunnable() {
-    private val resetTime = 60 * 30
-    private val kitChangeTime = 5 * 60
-    private var currentTime = 0
-    private var kitTime = 0
+class GameScheduler(
+    val resetTime: Int = 60 * 30,
+    val kitChangeTime: Int = 5 * 60
+): BukkitRunnable() {
+    var currentTime = 0; private set
+    var kitTime = 0; private set
 
     override fun run() {
         if(kitTime >= kitChangeTime) {
@@ -24,32 +24,6 @@ class GameScheduler: BukkitRunnable() {
         }
         kitTime++
         currentTime++
-        for (player in onlinePlayers) {
-            val calculatedKitTime: Int = kitChangeTime - kitTime
-            val calculatedResetTime: Int = resetTime - currentTime
-
-            if (player.isIngame) {
-                player.sendActionBar(literalText {
-                    text("Reset: ") {
-                        color = KColors.CADETBLUE
-                    }
-                    text(getTimeAsString(calculatedResetTime)) {
-                        color = KColors.LIME
-                    }
-                    text(" | ") {
-                        color = KColors.DARKSLATEGRAY
-                    }
-                    text("Kitwechsel: ") {
-                        color = KColors.CADETBLUE
-                    }
-                    text(getTimeAsString(calculatedKitTime)) {
-                        color = KColors.LIME
-                    }
-                })
-            } else {
-                player.sendActionBar(Component.keybind("key.sneak").color(KColors.YELLOWGREEN).append(Component.text("  or /j").color(KColors.YELLOWGREEN)).append(Component.text(" um dem Spiel beizutreten.").color(KColors.SLATEGRAY))) // not using kspigot component dsl here for keybind compatibility
-            }
-        }
         if (currentTime >= resetTime) {
             kickPlayers()
             Bukkit.getServer().shutdown()
@@ -81,11 +55,5 @@ class GameScheduler: BukkitRunnable() {
                             "§o§7Deshalb wird der Server neu gestartet.\n" +
                             "§7Ein neuer Server startet in §akürze§f!"))
         }
-    }
-
-    private fun getTimeAsString(time: Int): String {
-        val minutes = time % 3600 / 60
-        val seconds = time % 60
-        return String.format("%02d:%02d ", minutes, seconds)
     }
 }
